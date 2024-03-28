@@ -1,0 +1,33 @@
+[package]
+name = "demo_web_zip_wasm"
+description = "Простой пример программа для создания архивов с паролем в формате ZIP, работающая в браузере с использованием WebAssembly."
+version = "0.1.0"
+edition = "2021"
+authors = ["Alexandr Matkin <mae664128@gmail.com>"]
+rust-version = "1.76"
+repository = "https://github.com/MAE664128/demo_web_zip_wasm"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+yew = { version = "0.21.0", features = ["csr"] }
+web-sys = { version = "0.3.69", features = [
+    "File", "DragEvent", "DataTransfer", "ReadableStream", "ReadableStreamDefaultReader"
+] }
+chrono = { version = "0.4", features = ["wasmbind"] }
+ryu = "1.0.17"
+zip = { version = "0.6.6", default-features = false, features = ["deflate"] }
+gloo-file = "0.3.0"
+
+
+[profile.release]
+# меньше кода для включения в двоичный файл
+panic = 'abort'
+# оптимизация всей кодовой базы (лучшая оптимизация, более медленная сборка)
+codegen-units = 1
+# оптимизация по размеру (более агрессивная)
+#opt-level = 'z'
+# оптимизация по размеру
+opt-level = 's'
+# оптимизация времени соединения с использованием анализа всей программы
+lto = true
