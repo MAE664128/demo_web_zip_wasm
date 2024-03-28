@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<head>
+    <title>Создать zip архив</title>
+    <meta charset="utf-8" />
+    <!-- config for our rust wasm binary. go to https://trunkrs.dev/assets/#rust for more customization -->
+    <link data-trunk rel="rust" data-wasm-opt="s"/>
+    <!-- this is the base url relative to which other urls will be constructed. trunk will insert this from the public-url option -->
+    <base data-trunk-public-url/>
+
+    <link data-trunk rel="icon" href="assets/favicon.ico">
+
+    <link data-trunk rel="copy-file" href="assets/manifest.json"/>
+    <link data-trunk rel="copy-file" href="assets/favicon.png"/>
+    <link data-trunk rel="copy-file" href="assets/icon512_maskable.png"/>
+    <link data-trunk rel="copy-file" href="assets/icon512_rounded.png"/>
+    <link data-trunk rel="copy-file" href="assets/bootstrap.min.css"/>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon512_rounded.png">
+
+    <link href="bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+</html>
