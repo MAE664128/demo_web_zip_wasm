@@ -29,12 +29,12 @@ impl yew::Component for DeleteFileRowComponent {
                 )}
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
-                title="Удалить текущий файл из списка"
+                title="Remove current file from list"
                 style="border-radius: unset;"
                 {onclick}
             >
                 {"✘"}
-                <span class="visually-hidden">{"Удалить"}</span>
+                <span class="visually-hidden">{"Delete"}</span>
             </button>
         }
     }

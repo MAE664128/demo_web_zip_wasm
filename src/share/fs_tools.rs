@@ -1,7 +1,7 @@
-//! Содержит обвязки к JS для работы с файловой системой через браузер.
+//! Contains JS bindings for working with the file system through the browser.
 
 
-/// Метод чтения файлов.
+/// File reading method.
 pub fn read_file(
     current_ind_file: usize,
     file_name: yew::AttrValue,
@@ -14,7 +14,7 @@ pub fn read_file(
             Ok(res) => { callback_loaded_file.emit((current_ind_file, file_name, res)); }
             Err(err) => {
                 callback_filed.emit((
-                    format!("Ошибка чтения файла {}", file_name),
+                    format!("Error reading file {}", file_name),
                     format!("{}", err)
                 ));
             }

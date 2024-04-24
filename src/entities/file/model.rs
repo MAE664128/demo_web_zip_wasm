@@ -1,17 +1,17 @@
 use crate::share;
 
-/// Информация о файле на локальной машине, который выбрал пользователь.
+/// Information about a file on the local computer selected by the user.
 #[derive(yew::Properties, PartialEq, Clone)]
 pub struct InfoAboutSelectedFile {
-    /// Название файла, как оно указано у пользователя на диске.
+    /// User-specified file name on disk.
     pub(crate) file_name: yew::virtual_dom::AttrValue,
-    /// Строка с датой последнего изменения файла.
+    /// A string containing the date the file was last modified.
     pub(crate) last_modified: yew::virtual_dom::AttrValue,
-    /// Строка с датой последнего изменения файла.
+    /// File type
     pub(crate) file_type: yew::virtual_dom::AttrValue,
-    /// Строка с размером файла файла.
+    /// A string containing the file size.
     pub(crate) file_size: yew::virtual_dom::AttrValue,
-    /// Размер файла в байтах.
+    /// File size in bytes.
     pub(crate) raw_size: u64,
     pub(crate) js_file_obj: gloo_file::File,
 }

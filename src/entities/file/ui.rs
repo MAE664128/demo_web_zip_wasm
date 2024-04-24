@@ -6,7 +6,7 @@ pub struct SelectedFileFileRowProps {
     pub(crate) info_about_selected_file: file::model::InfoAboutSelectedFile,
 }
 
-/// Компонент - Строка с информацией о выбранном файле.
+/// Component - A string containing information about the selected file.
 pub struct SelectedFileFileRowComponent;
 
 impl yew::Component for SelectedFileFileRowComponent {
@@ -17,9 +17,6 @@ impl yew::Component for SelectedFileFileRowComponent {
         Self
     }
 
-    // fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
-    //     todo!()
-    // }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let file_name = &ctx.props().info_about_selected_file.file_name;

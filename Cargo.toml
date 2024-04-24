@@ -1,6 +1,6 @@
 [package]
 name = "demo_web_zip_wasm"
-description = "Простой пример программа для создания архивов с паролем в формате ZIP, работающая в браузере с использованием WebAssembly."
+description = "A simple example program for creating ZIP archives running in the browser using WebAssembly."
 version = "0.1.0"
 edition = "2021"
 authors = ["Alexandr Matkin <mae664128@gmail.com>"]
@@ -21,13 +21,8 @@ gloo-file = "0.3.0"
 
 
 [profile.release]
-# меньше кода для включения в двоичный файл
 panic = 'abort'
-# оптимизация всей кодовой базы (лучшая оптимизация, более медленная сборка)
 codegen-units = 1
-# оптимизация по размеру (более агрессивная)
 #opt-level = 'z'
-# оптимизация по размеру
 opt-level = 's'
-# оптимизация времени соединения с использованием анализа всей программы
 lto = true

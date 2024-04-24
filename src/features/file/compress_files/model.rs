@@ -2,16 +2,16 @@ use std::io::Write;
 use zip::unstable::write::FileOptionsExt;
 
 
-/// Состояние процесса компрессии.
+/// State of the compression process.
 #[derive(PartialEq)]
 pub(crate) enum CompressingState {
-    /// Ожидает начала операции компрессии.
+    /// Waiting for the operation to start.
     WaitStart,
-    /// В процессе компрессии.
+    /// In progress.
     InProcess,
-    /// Процесс компрессии завершен.
+    /// Process completed.
     Done,
-    /// Процесс компрессии завершился неуспешно.
+    /// The process did not complete successfully.
     Fail,
 }
 
@@ -44,7 +44,7 @@ impl CompressionFiles {
         self.need_to_wait = false;
     }
 
-    /// Добавляем файл к нашему zip_writer.
+    /// Add the file to our zip_writer.
     pub fn add_file_in_zip(
         &mut self,
         file_name: &yew::AttrValue,
@@ -53,7 +53,7 @@ impl CompressionFiles {
         self.block();
         if self.state == CompressingState::Fail {
             self.unblock();
-            return Err(("Добавление файлов заблокировано.".to_string(), "".to_string()));
+            return Err(("Adding files is blocked.".to_string(), "".to_string()));
         }
         self.state = CompressingState::InProcess;
         let mut options = zip::write::FileOptions::default()
@@ -64,12 +64,12 @@ impl CompressionFiles {
         }
 
         if let Err(err) = self.zip_writer.start_file(format!("{}", file_name), options) {
-            // Не удалось добавить метаинформацию о файле в архив. Необходимо вернуть ответ.
+            // Failed to add file meta information to archive. The response must be returned.
             self.state = CompressingState::Fail;
             self.unblock();
             return Err((
                 format!(
-                    "Для файла {} не удалось добавить метаинформацию о файле в архив.",
+                    "Failed to add file meta information to archive: {}.",
                     file_name
                 ),
                 format!("{}", err)
@@ -79,15 +79,15 @@ impl CompressionFiles {
         self.unblock();
         match res_write {
             Ok(_) => {
-                // Файл записан успешно.
+                // The file was successfully written.
                 Ok(file_data.len())
             }
             Err(err) => {
                 self.state = CompressingState::Fail;
-                // Ошибка записи файла в архив.
+                // Error writing file to archive.
                 Err((
                     format!(
-                        "Ошибка записи файла {} в архив.",
+                        "Error writing file to archive: {}.",
                         file_name
                     ),
                     format!("{}", err)
@@ -95,7 +95,7 @@ impl CompressionFiles {
             }
         }
     }
-    /// Завершить запись в архив
+    /// Complete archiving
     pub fn finish(
         &mut self,
     ) -> Result<Vec<u8>, (String, String)> {
@@ -106,7 +106,7 @@ impl CompressionFiles {
             }
             Err(err) => {
                 self.state = CompressingState::Fail;
-                Err(("Не удалось создать архив.".to_string(), format!("{}", err)))
+                Err(("Failed to create archive.".to_string(), format!("{}", err)))
             }
         }
     }

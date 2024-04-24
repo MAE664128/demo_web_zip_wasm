@@ -5,22 +5,22 @@ use crate::features::file::compress_files::model::CompressingState;
 
 pub enum CompressionFilesMsg {
     StartCompression,
-    /// Файл прочитан с диска.
+    /// The file has been read from disk.
     LoadedFile(usize, yew::AttrValue, Vec<u8>),
     ProgressUpdateCompression {
         total_size: usize,
     },
     SuccessfulCompression(Vec<u8>),
     FailedCompression((String, String)),
-    /// Пароль из поля ввода.
+    /// Password from the input field.
     EditPassword(String),
 }
 
 #[derive(yew::Properties, PartialEq)]
 pub struct CompressionFilesProps {
-    /// Обратный вызов, когда компрессия была выполнена успешно.
+    /// Callback when compression was successful.
     pub on_start_compress: yew::Callback<()>,
-    /// Обратный вызов с индексом успешно компрессированного файла.
+    /// Callback with the index of the successfully compressed file.
     pub on_add_success_compress_file: yew::Callback<usize>,
     pub files: std::collections::HashMap<usize, std::rc::Rc<InfoAboutSelectedFile>>,
 }
@@ -72,9 +72,9 @@ impl yew::Component for CompressionFilesComponent {
             CompressionFilesMsg::StartCompression => {
                 ctx.props().on_start_compress.emit(());
 
-                // Разблокируем работу компрессора.
+                // Unlockable compressor operation.
                 self.is_blocked = false;
-                // Обнуляем компрессор.
+                // Compressor reset.
                 self.compressor = compress_files::model::CompressionFiles::new(self.password.clone());
 
                 let callback_loaded_file = ctx.link()
@@ -100,8 +100,8 @@ impl yew::Component for CompressionFilesComponent {
                 true
             }
             CompressionFilesMsg::LoadedFile(current_ind_file, file_name, data) => {
-                // Файл успешно прочитан с диска в память.
-                // Добавляем файл в компрессор
+                // The file was successfully read from disk into memory.
+                // Adding a file to the compressor.
                 if self.is_blocked { return true; }
                 if self.compressor.need_to_wait {
                     ctx.link().send_message(
@@ -182,7 +182,7 @@ impl yew::Component for CompressionFilesComponent {
             CompressingState::WaitStart => {
                 if ctx.props().files.is_empty() {
                     yew::html! {
-                        <p>{"Выберете файлы..."}</p>
+                        <p>{"Select files..."}</p>
                     }
                 } else {
                     yew::html! {
@@ -190,7 +190,7 @@ impl yew::Component for CompressionFilesComponent {
                             <input
                                 class={yew::classes!("form-control")}
                                 type="text"
-                                placeholder="Укажите пароль" aria-label="Укажите пароль"
+                                placeholder="Enter your password" aria-label="Enter your password"
                                 aria-describedby="button-compress"
                                 value={self.password.clone()}
                                 {onblur}
@@ -202,10 +202,10 @@ impl yew::Component for CompressionFilesComponent {
                                 class={yew::classes!("btn", "btn-outline-dark")}
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
-                                title="Запустить процесс сжатия файлов."
+                                title="Start file compression process."
                                 onclick={start_onclick}
                             >
-                                {"Упаковать"}
+                                {"Create zip"}
                             </button>
                         </div>
                     }
@@ -231,7 +231,7 @@ impl yew::Component for CompressionFilesComponent {
                             </div>
                         </div>
                         <div class={yew::classes!("col")}>
-                            <div>{format!("Упаковано: {total_size}")}</div>
+                            <div>{format!("Packed: {total_size}")}</div>
                         </div>
                     </div>
                 }
@@ -245,12 +245,12 @@ impl yew::Component for CompressionFilesComponent {
                         href={href}
                         download={"compressed.zip"}
                     >
-                        {format!("Скачать архив: {total_size}")}
+                        {format!("Download: {total_size}")}
                     </a>
                 }
                 } else {
                     yew::html! {
-                    <p>{"Ой, файл не доступен"}</p>
+                    <p>{"Oops, the file is not available"}</p>
                 }
                 }
             }
@@ -262,7 +262,7 @@ impl yew::Component for CompressionFilesComponent {
                     class={yew::classes!("alert", "alert-danger")}
                     data-bs-toggle={"tooltip"} data-bs-placement={"top"}
                     title={detail.to_string()}
-                    >{format!("Ошибка: {msg}")}
+                    >{format!("Error: {msg}")}
                     </div>
                 }
             }

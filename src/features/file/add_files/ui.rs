@@ -8,7 +8,7 @@ pub enum AddFileRowsMsg {
 
 #[derive(yew::Properties, PartialEq)]
 pub struct AddFileRowsProps {
-    /// Обратный вызов, когда пользователем были выбраны файлы.
+    /// Callback when files have been selected by the user.
     pub on_files_selection: yew::Callback<gloo_file::FileList>,
 }
 
@@ -74,13 +74,13 @@ impl yew::Component for AddFileRowsComponent {
                     </div>
 
                     <label for="file-upload">
-                        <p>{"Перетащите сюда свои файлы или нажмите, чтобы выбрать их"}</p>
+                        <p>{"Drag and drop your files here or click to select them."}</p>
                     </label>
-                    <p>{"или"}</p>
+                    <p>{"or"}</p>
                     <span class="btn btn-outline-dark"
                           style="position: relative; overflow: hidden;"
                     >
-                        {"Выбрать файл(ы)"}
+                        {"Select file(s)"}
                         <input
                             style="position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; font-size: 100px; text-align: right; filter: alpha(opacity=0); opacity: 0; outline: none; cursor: inherit; display: block;"
                             id="file-upload"

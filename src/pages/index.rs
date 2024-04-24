@@ -13,8 +13,8 @@ impl yew::Component for IndexPage {
         yew::html! {
             <>
                 <div class={yew::classes!("row", "text-center", "border")}>
-                    <h3>{"Создать Zip архив"}</h3>
-                    <p>{"Простой пример программа для создания архивов с паролем в формате ZIP, работающая в браузере с использованием WebAssembly"}</p>
+                    <h3>{"Create Zip archive"}</h3>
+                    <p>{"A simple example program for creating ZIP archives running in the browser using WebAssembly."}</p>
                     <p>{"GitHub: "}<a href={"https://github.com/MAE664128/demo_web_zip_wasm"} target="_blank">{"mae664128/demo_web_zip_wasm"}</a></p>
                 </div>
                 <crate::widgets::file_selection_block::FileSelectionBlockComponent />
