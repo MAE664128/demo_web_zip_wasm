@@ -2,16 +2,16 @@ use yew::Context;
 use crate::{entities, features, share};
 
 pub enum FileSelectionBlockMsg {
-    /// Получен новый список файлов
+    /// New file list received.
     NewFileList(gloo_file::FileList),
     RemoveFile(usize),
-    /// Сообщение о необходимости заблокировать интерфейс добавления и удаления фалов.
+    /// Message about the need to block the interface
     NeedToBlock,
-    /// Сообщение с индексом файла, который успешно был сжат.
+    /// Message with the index of the compressed file.
     SuccessCompressFile(usize),
 }
 
-/// Компонент - Область для добавления и компрессии файлов.
+/// Component - an area for adding and compressing files.
 pub struct FileSelectionBlockComponent {
     files: std::collections::HashMap<usize, std::rc::Rc<entities::file::model::InfoAboutSelectedFile>>,
     need_to_block_action: bool,
@@ -97,7 +97,7 @@ impl yew::Component for FileSelectionBlockComponent {
                 </div>
                 if !self.files.is_empty() {
                 <div class={yew::classes!("row", "border", "rounded-bottom", "border-top-0", "py-2")}>
-                    <div class={yew::classes!("col", "col-4")}>{format!("Суммарный размер: {}",size)}</div>
+                    <div class={yew::classes!("col", "col-4")}>{format!("Total size: {}",size)}</div>
                     <div class={yew::classes!("col", "col-8", "d-flex", "justify-content-end")}>
                         <features::file::compress_files::CompressionFilesComponent files={self.files.clone()} on_start_compress={on_start_compress} on_add_success_compress_file={on_add_success_compress_file}/>
                     </div>
