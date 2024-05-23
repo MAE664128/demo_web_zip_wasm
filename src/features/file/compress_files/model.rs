@@ -78,7 +78,7 @@ impl CompressionFiles {
 
         if self.zip_writer.is_none() {
             self.unblock();
-            return Err(("zip_writer is not defined.".to_string(), "".to_string()));
+            Err(("zip_writer is not defined.".to_string(), "".to_string()))
         } else {
             let mut zip_writer = std::mem::take(&mut self.zip_writer).unwrap();
             let mut options = zip::write::SimpleFileOptions::default();
