@@ -1,6 +1,20 @@
 use std::io::Write;
 use zip::unstable::write::FileOptionsExt;
 
+#[derive(PartialEq, Copy, Clone)]
+pub(crate) enum TypeEncryption {
+    ZipCrypto,
+    Aes256,
+}
+
+impl From<String> for TypeEncryption {
+    fn from(value: String) -> Self {
+        match value.as_str() {
+            "Aes256" => { Self::Aes256 }
+            _ => { Self::ZipCrypto }
+        }
+    }
+}
 
 /// State of the compression process.
 #[derive(PartialEq)]
@@ -17,6 +31,7 @@ pub(crate) enum CompressingState {
 
 pub(crate) struct CompressionFiles {
     password: String,
+    type_encryption: TypeEncryption,
     zip_writer: Option<zip::ZipWriter<std::io::Cursor<Vec<u8>>>>,
     pub state: CompressingState,
     pub need_to_wait: bool,
@@ -24,9 +39,10 @@ pub(crate) struct CompressionFiles {
 
 
 impl CompressionFiles {
-    pub fn new(password: String) -> Self {
+    pub fn new(password: String, type_encryption: TypeEncryption) -> Self {
         Self {
             password,
+            type_encryption,
             zip_writer: Some(zip::ZipWriter::new(std::io::Cursor::new(vec![]))),
             state: CompressingState::WaitStart,
             need_to_wait: false,
@@ -36,7 +52,9 @@ impl CompressionFiles {
     pub fn change_state_on_in_process(&mut self) {
         self.state = CompressingState::InProcess
     }
-
+    pub fn change_state_on_in_fail(&mut self) {
+        self.state = CompressingState::Fail
+    }
     fn block(&mut self) {
         self.need_to_wait = true;
     }
@@ -47,7 +65,7 @@ impl CompressionFiles {
     /// Add the file to our zip_writer.
     pub fn add_file_in_zip(
         &mut self,
-        ind:usize,
+        ind: usize,
         file_name: &yew::AttrValue,
         file_data: &[u8],
     ) -> Result<usize, (String, String)> {
@@ -66,7 +84,14 @@ impl CompressionFiles {
             let mut options = zip::write::SimpleFileOptions::default();
 
             if !self.password.is_empty() {
-                options = options.with_deprecated_encryption(self.password.as_bytes());
+                options = if self.type_encryption == TypeEncryption::Aes256 {
+                    options.with_aes_encryption(
+                        zip::AesMode::Aes256,
+                        self.password.as_str(),
+                    )
+                } else {
+                    options.with_deprecated_encryption(self.password.as_bytes())
+                };
             }
 
             let new_archive_filename = format!("{}-{}", ind, file_name.as_str());

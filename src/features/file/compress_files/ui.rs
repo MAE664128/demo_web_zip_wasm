@@ -1,7 +1,7 @@
 use yew::TargetCast;
 use crate::entities::file::model::InfoAboutSelectedFile;
 use crate::features::file::compress_files;
-use crate::features::file::compress_files::model::CompressingState;
+use crate::features::file::compress_files::model::{CompressingState, TypeEncryption};
 
 pub enum CompressionFilesMsg {
     StartCompression,
@@ -14,6 +14,7 @@ pub enum CompressionFilesMsg {
     FailedCompression((String, String)),
     /// Password from the input field.
     EditPassword(String),
+    ChangeTypeEncryption(String),
 }
 
 #[derive(yew::Properties, PartialEq)]
@@ -27,6 +28,7 @@ pub struct CompressionFilesProps {
 
 pub struct CompressionFilesComponent {
     password: String,
+    type_encryption: TypeEncryption,
     is_blocked: bool,
     compressor: compress_files::model::CompressionFiles,
     file_reading_tasks: std::collections::HashMap<yew::AttrValue, gloo_file::callbacks::FileReader>,
@@ -50,10 +52,12 @@ impl yew::Component for CompressionFilesComponent {
 
     fn create(_ctx: &yew::Context<Self>) -> Self {
         let password = String::new();
+        let type_encryption = TypeEncryption::Aes256;
         Self {
             password: password.clone(),
+            type_encryption,
             is_blocked: false,
-            compressor: compress_files::model::CompressionFiles::new(password),
+            compressor: compress_files::model::CompressionFiles::new(password, type_encryption),
             file_reading_tasks: std::collections::HashMap::new(),
             number_of_successfully_processed_files: 0,
             total_size: 0,
@@ -64,6 +68,10 @@ impl yew::Component for CompressionFilesComponent {
 
     fn update(&mut self, ctx: &yew::Context<Self>, msg: Self::Message) -> bool {
         match msg {
+            CompressionFilesMsg::ChangeTypeEncryption(value) => {
+                self.type_encryption = TypeEncryption::from(value);
+                true
+            }
             CompressionFilesMsg::EditPassword(edit_value) => {
                 self.password = edit_value.trim().to_string();
                 true
@@ -75,7 +83,10 @@ impl yew::Component for CompressionFilesComponent {
                 // Unlockable compressor operation.
                 self.is_blocked = false;
                 // Compressor reset.
-                self.compressor = compress_files::model::CompressionFiles::new(self.password.clone());
+                self.compressor = compress_files::model::CompressionFiles::new(
+                    self.password.clone(),
+                    self.type_encryption,
+                );
 
                 let callback_loaded_file = ctx.link()
                     .callback(
@@ -156,6 +167,7 @@ impl yew::Component for CompressionFilesComponent {
                 self.is_blocked = true;
                 self.err_msg = err;
                 self.file_reading_tasks = std::collections::HashMap::new();
+                self.compressor.change_state_on_in_fail();
                 true
             }
             CompressionFilesMsg::SuccessfulCompression(data) => {
@@ -171,11 +183,18 @@ impl yew::Component for CompressionFilesComponent {
             input.set_value("");
             CompressionFilesMsg::EditPassword(value)
         };
+        let change = move |input: web_sys::HtmlInputElement| {
+            let value = input.value();
+            CompressionFilesMsg::ChangeTypeEncryption(value)
+        };
 
         let onblur = &ctx.link().callback(move |e: web_sys::FocusEvent| edit(e.target_unchecked_into()));
 
         let onkeypress = &ctx.link().batch_callback(move |e: web_sys::KeyboardEvent| {
             (e.key() == "Enter").then(|| edit(e.target_unchecked_into()))
+        });
+        let onchange =&ctx.link().callback(move |e: web_sys::Event| {
+            change(e.target_unchecked_into())
         });
 
         let start_onclick = &ctx.link().callback(|_| CompressionFilesMsg::StartCompression);
@@ -187,7 +206,15 @@ impl yew::Component for CompressionFilesComponent {
                     }
                 } else {
                     yew::html! {
-                        <div class="input-group mb-3">
+                        <div class={yew::classes!("input-group", "mb-3")}>
+                            <select class={yew::classes!("form-select", "form-select-sm")}
+                                style="max-width: 135px;"
+                                onchange={onchange}
+                            >
+                                <option selected={self.type_encryption == TypeEncryption::ZipCrypto} value={"ZipCrypto"}>{"ZipCrypto"}</option>
+                                <option selected={self.type_encryption == TypeEncryption::Aes256} value={"Aes256"}>{"Aes256"}</option>
+                            </select>
+
                             <input
                                 class={yew::classes!("form-control")}
                                 type="text"
