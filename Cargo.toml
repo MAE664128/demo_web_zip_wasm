@@ -1,7 +1,7 @@
 [package]
 name = "demo_web_zip_wasm"
 description = "A simple example program for creating ZIP archives running in the browser using WebAssembly."
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Alexandr Matkin <mae664128@gmail.com>"]
 rust-version = "1.76"
@@ -16,7 +16,7 @@ web-sys = { version = "0.3.69", features = [
 ] }
 chrono = { version = "0.4", features = ["wasmbind"] }
 ryu = "1.0.17"
-zip = { version = "0.6.6", default-features = false, features = ["deflate"] }
+zip = { version = "1.2.3", default-features = false, features = ["deflate", "aes-crypto"] }
 gloo-file = "0.3.0"
 
 
