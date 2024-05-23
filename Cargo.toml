@@ -16,7 +16,7 @@ web-sys = { version = "0.3.69", features = [
 ] }
 chrono = { version = "0.4", features = ["wasmbind"] }
 ryu = "1.0.17"
-zip = { version = "0.6.6", default-features = false, features = ["deflate"] }
+zip = { version = "1.2.3", default-features = false, features = ["deflate", "aes-crypto"] }
 gloo-file = "0.3.0"
 
 

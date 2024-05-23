@@ -110,6 +110,7 @@ impl yew::Component for CompressionFilesComponent {
                     return true;
                 }
                 match self.compressor.add_file_in_zip(
+                    current_ind_file,
                     &file_name,
                     &data,
                 ) {
