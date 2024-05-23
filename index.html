@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<head>
+    <title>Create zip archive</title>
+    <meta charset="utf-8" />
+    <!-- config for our rust wasm binary. go to https://trunkrs.dev/assets/#rust for more customization -->
+    
+<script type="module">
+import init, * as bindings from 'https://mae664128.github.io/demo_web_zip_wasm/demo_web_zip_wasm-eb2f5629928ec371.js';
+const wasm = await init('https://mae664128.github.io/demo_web_zip_wasm/demo_web_zip_wasm-eb2f5629928ec371_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+    <!-- this is the base url relative to which other urls will be constructed. trunk will insert this from the public-url option -->
+    <base href="https://mae664128.github.io/demo_web_zip_wasm/" />
+
+    <link rel="icon" href="https://mae664128.github.io/demo_web_zip_wasm/favicon-8e5ab6e8cb9a1bd7.ico" integrity="sha384&#x2D;&#x2F;P2tx&#x2F;Imug1t5QfE2xG9nk6RgqQVeih0PDh1FzStpDeU23F0uvCWx6twQYs7j4pN"/>
+
+    
+    
+    
+    
+    
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon512_rounded.png">
+
+    <link href="bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<link rel="modulepreload" href="https://mae664128.github.io/demo_web_zip_wasm/demo_web_zip_wasm-eb2f5629928ec371.js" crossorigin=anonymous integrity="sha384-E6+Ne4aZCotp1F9UWVkucP5mDSFrQUIBTIvvzHUndo7eHFROk8A/k3Sry35rsQIK">
+<link rel="preload" href="https://mae664128.github.io/demo_web_zip_wasm/demo_web_zip_wasm-eb2f5629928ec371_bg.wasm" crossorigin=anonymous integrity="sha384-XikT0GhZJgaTQoG5oMxF/w1kKUkN7HD+mJ7Pv/sYZrzI7VTAywGB7eNLpps4RI0V" as="fetch" type="application/wasm"></head>
+</html>
